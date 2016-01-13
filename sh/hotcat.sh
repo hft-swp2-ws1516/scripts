@@ -67,7 +67,7 @@ db_api_dir=$root_dir'db-api/'
 CreateDIR $db_api_dir
 crawler_dir=$root_dir'crawler/'
 CreateDIR $crawler_dir
-website_dir=$root_dir'website/'
+website_dir='/var/www/HotCat/website/'
 CreateDIR $website_dir
 echo 
 
@@ -76,8 +76,48 @@ git='git'
 CheckIfInstalled $git
 
 # pull latest from GitHub
-echo "Clone / Pull from GitHub:"
+echo "Clone/Pull from GitHub:"
 CloneFromGitHub $db_api_link $db_api_dir
 CloneFromGitHub $crawler_link $crawler_dir
 CloneFromGitHub $website_link $website_dir
 echo "${DEFAULT}"
+
+# extend / update list
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927 > /dev/null
+echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list > /dev/null
+
+# update packages
+echo -n "${BLUE}Update packages${DEFAULT}"; apt-get update > /dev/null; echo " ${GREEN}done!${DEFAULT}"
+
+# apt-get install
+echo -n "${BLUE}Install mongodb-org${DEFAULT}"; apt-get install -y mongodb-org > /dev/null ; echo " ${GREEN}done!${DEFAULT}"
+echo -n "${BLUE}Install apache2${DEFAULT}"; apt-get install apache2 > /dev/null ; echo " ${GREEN}done!${DEFAULT}"
+echo -n "${BLUE}Install npm${DEFAULT}"; apt-get install npm > /dev/null ; echo " ${GREEN}done!${DEFAULT}"
+echo -n "${BLUE}Install python-pip${DEFAULT}"; apt-get install python-pip > /dev/null ; echo " ${GREEN}done!${DEFAULT}"
+
+# db_api specific 
+echo "${GREEN}>>> DB_API <<<"
+cd $db_api_dir
+npm install > /dev/null
+echo "${GREEN}done!"
+
+# crawler specific
+echo "${BLUE}>>> CRAWLER <<<"
+cd $crawler_dir
+pip install tornado > /dev/null
+pip install pymongo > /dev/null
+pip install tld > /dev/null
+pip install settings > /dev/null
+#export PYTHONPATH=/home/hotcat/HotCat/crawler/
+echo "${BLUE}done!"
+
+# website specific
+echo "${YELLOW}>>> WEBSITE <<<"
+cd $website_dir
+npm install --global gulp > /dev/null
+npm install --save gulp-uglify > /dev/null
+npm install > /dev/null
+gulp build > /dev/null
+echo "${YELLOW}done!"
+echo ${DEFAULT}
+
