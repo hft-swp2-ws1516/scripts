@@ -23,7 +23,7 @@ CheckURL() {
 CreateDIR() {
     if [ ! -d "$1" ]
     then
-        mkdir -p -- "$1"
+        mkdir "$1"
         echo "  $1 ${YELLOW}...created!${DEFAULT}"
     else
         echo "  $1 ${GREEN}...exists!${DEFAULT}"
@@ -68,6 +68,8 @@ CreateDIR $db_api_dir
 crawler_dir=$root_dir'crawler/'
 CreateDIR $crawler_dir
 website_dir='/var/www/HotCat/website/'
+CreateDIR '/var/www/'
+CreateDIR '/var/www/HotCat/'
 CreateDIR $website_dir
 echo 
 
@@ -83,8 +85,8 @@ CloneFromGitHub $website_link $website_dir
 echo "${DEFAULT}"
 
 # extend / update list
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927 > /dev/null
-echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list > /dev/null
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927 2>/dev/null
+echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list 
 
 # update packages
 echo -n "${BLUE}Update packages${DEFAULT}"; apt-get update > /dev/null; echo " ${GREEN}done!${DEFAULT}"
@@ -94,22 +96,25 @@ echo -n "${BLUE}Install mongodb-org${DEFAULT}"; apt-get install -y mongodb-org >
 echo -n "${BLUE}Install apache2${DEFAULT}"; apt-get install apache2 > /dev/null ; echo " ${GREEN}done!${DEFAULT}"
 echo -n "${BLUE}Install npm${DEFAULT}"; apt-get install npm > /dev/null ; echo " ${GREEN}done!${DEFAULT}"
 echo -n "${BLUE}Install python-pip${DEFAULT}"; apt-get install python-pip > /dev/null ; echo " ${GREEN}done!${DEFAULT}"
+echo
 
 # db_api specific 
 echo "${GREEN}>>> DB_API <<<"
 cd $db_api_dir
-npm install > /dev/null
+npm install 2>/dev/null
 echo "${GREEN}done!"
+echo
 
 # crawler specific
 echo "${BLUE}>>> CRAWLER <<<"
 cd $crawler_dir
-pip install tornado > /dev/null
-pip install pymongo > /dev/null
-pip install tld > /dev/null
-pip install settings > /dev/null
+pip install tornado >/dev/null
+pip install pymongo >/dev/null
+pip install tld >/dev/null
+pip install settings >/dev/null
 #export PYTHONPATH=/home/hotcat/HotCat/crawler/
 echo "${BLUE}done!"
+echo
 
 # website specific
 echo "${YELLOW}>>> WEBSITE <<<"
@@ -120,4 +125,3 @@ npm install > /dev/null
 gulp build > /dev/null
 echo "${YELLOW}done!"
 echo ${DEFAULT}
-
