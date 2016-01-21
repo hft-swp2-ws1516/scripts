@@ -130,7 +130,7 @@ echo "|-------------------------------------------------------------------------
 echo "|                                                                                |"
 echo "|- Installing packages:                                                          |"
 # Mongo-DB
-{sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927} > /dev/null 2>&1
+{ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927; } > /dev/null 2>&1
 echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list > /dev/null 
 echo -n "|- Update packages"; 
 sudo apt-get update > /dev/null; 
@@ -208,6 +208,11 @@ echo "|                                                                         
 echo "| HFT Stuttgart:   http://www.hft-stuttgart.de/                                  |"
 echo "| GitHub:          https://github.com/hft-swp2-ws1516                            |"
 echo "|                                                                                |"
+echo "| run crawler:     $ python hotcat.py                                            |"
+echo "| run api:         $ nodejs api.js                                               |"
+echo "| website:         file:///var/www/HotCat/website/src/index.html                 |"
+echo "|                                                                                |"
 echo "|--------------------------------------------------------------------------------|"
 echo ${DEFAULT}
+
 
