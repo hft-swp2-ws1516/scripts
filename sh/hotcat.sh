@@ -96,7 +96,7 @@ website_link=https://github.com/hft-swp2-ws1516/website.git
 CheckURL $website_link
 
 # create directories
-echo "|- Createing directories.                                                        |"
+echo "|- Creating directories.                                                        |"
 root_dir=$HOME'/HotCat/'
 CreateDIR $root_dir
 db_api_dir=$root_dir'db-api/'
